@@ -19,7 +19,7 @@ app.get('/home',(req,res)=>{
 if(ENV.NODE_ENV === "production"){
      app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-    app.get("/{*any}",(req,res)=>{
+    app.get("*",(req,res)=>{
         res.sendFile(path.join(__dirname, "../frontend","dist","index.html"));
     })
 }
@@ -27,12 +27,12 @@ if(ENV.NODE_ENV === "production"){
  const startServer = async () =>{
     try {
         await connectDB();
-        app.listen(ENV.PORT , ()=>{
-        console.log("server started at: ",ENV.PORT);
-   });
+        const PORT = process.env.PORT || ENV.PORT || 3000;
+    app.listen(PORT, () => console.log(`Server started at: ${PORT}`));
     } catch (error) {
         console.error("Error at starting the Server",error);
+        process.exit(1);
     }
  }
 
- 
+ startServer();
