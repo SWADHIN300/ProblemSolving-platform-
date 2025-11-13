@@ -1,9 +1,9 @@
 import User from "../models/User.js";
 import { connectDB } from "./db.js";
-import { inngest } from "inngest";
+import { Inngest } from "inngest";
 
 
-export const inngest = new inngest({id:"problemsolving-platform"});
+export const inngest = new Inngest({id:"problemsolving-platform"});
 
 const syncUser = inngest.createFunction(
     {id:"sync-user"},
