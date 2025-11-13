@@ -6,7 +6,7 @@ function App() {
 
   return (
     <>
-        <h1>Welcomoe Buddy</h1>
+        <h1>Welcome Buddy</h1>
      <SignedOut>
        <SignInButton mode="modal">
         <button>Login</button>
