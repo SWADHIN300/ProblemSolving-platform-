@@ -3,20 +3,17 @@ import { ENV } from "./lib/env.js";
 import path from "path";
 import { connectDB } from "./lib/db.js";
 import cors from "cors";
+import {serve} from "inngest/express";
+import { inngest } from "./lib/inngest.js";
 
 const app = express();
 
 const __dirname = path.resolve();
 
 app.use(express.json());
-app.use(cors());
-// app.use((req, res, next) => {
-//   res.setHeader(
-//     "Content-Security-Policy",
-//     "default-src 'none'; connect-src 'self' http://localhost:3000; script-src 'self'; style-src 'self';"
-//   );
-//   next();
-// });
+app.use(cors({origin:ENV.CLIENT_URL,credentials:true}));
+app.use("/api/inngest",serve({client:inngest, functions}));
+
 
 app.get('/home',(req,res)=>{
     res.status(200).json({
