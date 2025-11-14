@@ -6,19 +6,6 @@ import cors from "cors";
 import {serve} from "inngest/express";
 import { inngest,functions } from "./lib/inngest.js";
 
-// import express from "express";
-// import path from "path";
-// import cors from "cors";
-// import { serve } from "inngest/express";
-// import { clerkMiddleware } from "@clerk/express";
-
-// import { ENV } from "./lib/env.js";
-// import { connectDB } from "./lib/db.js";
-// import { inngest, functions } from "./lib/inngest.js";
-
-// import chatRoutes from "./routes/chatRoutes.js";
-// import sessionRoutes from "./routes/sessionRoute.js";
-
 const app = express();
 
 const __dirname = path.resolve();
