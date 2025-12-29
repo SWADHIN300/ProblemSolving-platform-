@@ -5,6 +5,7 @@ import { connectDB } from "./lib/db.js";
 import cors from "cors";
 import {serve} from "inngest/express";
 import { inngest,functions } from "./lib/inngest.js";
+import { createUser, getUser } from "./controllers/userController.js";
 
 const app = express();
 
