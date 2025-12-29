@@ -9,24 +9,44 @@ const syncUser = inngest.createFunction(
   { id: "sync-user" },
   { event: "clerk/user.created" },
   async ({ event }) => {
-    await connectDB();
+    try {
+      await connectDB();
 
-    const { id, email_addresses, first_name, last_name, image_url } = event.data;
+      const { id, email_addresses, first_name, last_name, image_url } = event.data;
 
-    const newUser = {
-      clerkId: id,
-      email: email_addresses[0]?.email_address,
-      name: `${first_name || ""} ${last_name || ""}`,
-      profileImage: image_url,
-    };
+      console.log("Syncing user:", { id, email_addresses, first_name, last_name, image_url });
 
-    await User.create(newUser);
+      const name = `${first_name || ""} ${last_name || ""}`.trim();
+      if (!name) {
+        throw new Error("User name is required but not provided by Clerk");
+      }
 
-    await upsertStreamUser({
-      id: newUser.clerkId.toString(),
-      name: newUser.name,
-      image: newUser.profileImage,
-    });
+      const email = email_addresses[0]?.email_address;
+      if (!email) {
+        throw new Error("User email is required but not provided by Clerk");
+      }
+
+      const newUser = {
+        clerkId: id,
+        email,
+        name,
+        profileImage: image_url || "",
+      };
+
+      const createdUser = await User.create(newUser);
+      console.log("User created in DB:", createdUser);
+
+      await upsertStreamUser({
+        id: newUser.clerkId.toString(),
+        name: newUser.name,
+        image: newUser.profileImage,
+      });
+
+      console.log("User synced successfully");
+    } catch (error) {
+      console.error("Error syncing user:", error);
+      throw error; // Re-throw to mark function as failed
+    }
   }
 );
 
